@@ -44,10 +44,23 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/featured-courses", async (req, res) => {
+      try {
+        const cursor = coursesCollection
+          .find()
+          .sort({ createdAt: -1 })
+          .limit(6);
+        const result = await cursor.toArray();
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: "Failed to fetch featured courses" });
+      }
+    });
     // api for course details
     app.get("/course-details/:id", async (req, res) => {
       const id = req.params.id;
-      const query = { _id : new ObjectId(id) };
+      const query = { _id: new ObjectId(id) };
       const result = await coursesCollection.findOne(query);
       res.send(result);
     });
