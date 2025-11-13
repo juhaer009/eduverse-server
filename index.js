@@ -57,6 +57,19 @@ async function run() {
         res.status(500).send({ error: "Failed to fetch featured courses" });
       }
     });
+
+    // api for mycourses
+    app.get("/mycourses", async (req, res) => {
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.email = email;
+      }
+      const cursor = coursesCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // api for course details
     app.get("/course-details/:id", async (req, res) => {
       const id = req.params.id;
