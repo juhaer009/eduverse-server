@@ -26,7 +26,7 @@ app.get("/", (req, res) => {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const db = client.db("eduverse_db");
     const coursesCollection = db.collection("courses");
@@ -75,6 +75,25 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await coursesCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // api for updating course
+    app.patch("/courses/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedCourse = req.body;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: {
+          courseTitle: updatedCourse.courseTitle,
+          courseImage: updatedCourse.courseImage,
+          price: updatedCourse.price,
+          duration: updatedCourse.duration,
+          category: updatedCourse.category,
+          description: updatedCourse.description,
+        },
+      };
+      const result = await coursesCollection.updateOne(query, update);
       res.send(result);
     });
 
