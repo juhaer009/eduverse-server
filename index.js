@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
+require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -9,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const uri =
-  "mongodb+srv://eduverseDBusers:ibMy0ZCdxr0oIC3s@simple-crud-server.hfigrlp.mongodb.net/?appName=simple-crud-server";
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@simple-crud-server.hfigrlp.mongodb.net/?appName=simple-crud-server`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -85,8 +86,8 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const update = {
         $set: {
-          courseTitle: updatedCourse.courseTitle,
-          courseImage: updatedCourse.courseImage,
+          title: updatedCourse.title,
+          image: updatedCourse.image,
           price: updatedCourse.price,
           duration: updatedCourse.duration,
           category: updatedCourse.category,
